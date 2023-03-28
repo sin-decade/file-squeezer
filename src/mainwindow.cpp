@@ -1,3 +1,22 @@
+/*
+ *   The GNU General Public License v3.0
+ *
+ *   Copyright (C) 2023 Yaroslav Riabtsev <yaroslav.riabtsev@rwth-aachen.de>
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+*/
 
 // Qt
 #include <QApplication>
@@ -7,8 +26,8 @@
 #include <QTextStream>
 #include <QByteArray>
 #include <QBoxLayout>
+#include <QDebug>
 // KF
-#include <KTextEdit>
 #include <KLocalizedString>
 #include <KActionCollection>
 #include <KStandardAction>
@@ -16,10 +35,12 @@
 #include <KIO/Job>
 // own
 #include "mainwindow.hpp"
+#include "tabs/texttab.hpp"
+#include "tabs/digitaltab.hpp"
 
 MainWindow::MainWindow(QWidget *parent) : KXmlGuiWindow(parent) {
-    textArea = new KTextEdit();
-    digitTextArea = new KTextEdit();
+    textArea = new TextTab();
+    digitTextArea = new DigitalTab();
 
     auto* mainWidget = new QWidget;
     auto* texts = new QHBoxLayout(mainWidget);
@@ -99,7 +120,7 @@ void MainWindow::downloadFinished(KJob *job) {
     if (storedJob) {
         auto txt = QTextStream(storedJob->data(), QIODevice::ReadOnly).readAll();
         textArea->setPlainText(txt);
-        digitTextArea->setPlainText(txt);
+        digitTextArea->setDigitText(txt);
     }
 }
 

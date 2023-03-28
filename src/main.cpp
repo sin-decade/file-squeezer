@@ -55,8 +55,8 @@ int main(int argc, char *argv[]) {
     parser.process(app);
     aboutData.processCommandLine(&parser);
 
-    MainWindow *window = new MainWindow();
+    auto *window = new MainWindow();
     window->show();
 
-    return app.exec();
+    return QApplication::exec();
 }
