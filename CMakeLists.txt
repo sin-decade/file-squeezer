@@ -36,7 +36,9 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 set(ya-fsqueezer_SRCS src/main.cpp src/mainwindow.cpp
-        src/tabs/texttab.cpp src/tabs/digitaltab.cpp)
+        src/tabs/texttab.cpp src/tabs/digitaltab.cpp
+        src/widgets/basetab.cpp src/widgets/settings.cpp
+        src/controls/digitaltabsettings.cpp src/controls/texttabsettings.cpp)
 
 add_executable(ya-fsqueezer ${ya-fsqueezer_SRCS})
 
