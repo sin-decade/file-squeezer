@@ -18,9 +18,19 @@
  *
 */
 
-// own
-#include "digitaltabsettings.hpp"
+#ifndef YA_FSQUEEZER_SETTINGSTAB_HPP
+#define YA_FSQUEEZER_SETTINGSTAB_HPP
 
-DigitalTabSettings::DigitalTabSettings(QWidget *parent) : Settings(parent) {
 
-}
+// Qt
+#include <QWidget>
+
+class SettingsTab : public QWidget {
+Q_OBJECT
+public:
+    explicit SettingsTab(QWidget *parent = nullptr);
+
+};
+
+
+#endif //YA_FSQUEEZER_SETTINGSTAB_HPP

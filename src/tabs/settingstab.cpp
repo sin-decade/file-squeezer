@@ -18,19 +18,9 @@
  *
 */
 
-// Qt
-#include <QBoxLayout>
 // own
-#include "basetab.hpp"
+#include "settingstab.hpp"
 
-BaseTab::BaseTab(QWidget *parent) : QWidget(parent) {
-    auto *boxLayout = new QVBoxLayout(this);
-    mainArea = new QWidget;
-    settings = new QWidget;
-    boxLayout->addWidget(mainArea);
-    boxLayout->addWidget(settings);
-}
+SettingsTab::SettingsTab(QWidget *parent) : QWidget(parent) {
 
-void BaseTab::setMainArea(QWidget *area) {
-    mainArea = area;
 }

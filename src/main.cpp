@@ -29,10 +29,10 @@
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
-    KLocalizedString::setApplicationDomain("yafilesqueezer");
+    KLocalizedString::setApplicationDomain("ya-fsqueezer");
 
     KAboutData aboutData(
-            QStringLiteral("yafilesqueezer"),
+            QStringLiteral("ya-fsqueezer"),
             i18n("YaFileSqueezer"),
             QStringLiteral("1.0"),
             i18n("An interactive file archiver that allows users "

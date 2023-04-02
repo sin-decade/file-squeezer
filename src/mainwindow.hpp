@@ -30,6 +30,10 @@ class DigitalTab;
 
 class KJob;
 
+class QSplitter;
+
+class QTabWidget;
+
 class MainWindow : public KXmlGuiWindow {
 Q_OBJECT
 
@@ -48,6 +52,7 @@ private Q_SLOTS:
 
     void downloadFinished(KJob *job);
 
+
 private:
     void setupActions();
 
@@ -56,6 +61,7 @@ private:
     TextTab *textArea;
     DigitalTab *digitTextArea;
     QString fileName;
+
 };
 
 

@@ -20,13 +20,14 @@
 
 // Qt
 #include <QApplication>
-#include <QAction>
 #include <QSaveFile>
 #include <QFileDialog>
 #include <QTextStream>
 #include <QByteArray>
 #include <QBoxLayout>
 #include <QDebug>
+#include <QTabBar>
+#include <QMenu>
 // KF
 #include <KLocalizedString>
 #include <KActionCollection>
@@ -37,17 +38,22 @@
 #include "mainwindow.hpp"
 #include "tabs/texttab.hpp"
 #include "tabs/digitaltab.hpp"
+#include "src/tabs/settingstab.hpp"
+#include "src/widgets/tabsplitter.hpp"
+
 
 MainWindow::MainWindow(QWidget *parent) : KXmlGuiWindow(parent) {
     textArea = new TextTab();
     digitTextArea = new DigitalTab();
+    auto settingsTab = new SettingsTab();
 
-    auto* mainWidget = new QWidget;
-    auto* texts = new QHBoxLayout(mainWidget);
-    texts->addWidget(textArea);
-    texts->addWidget(digitTextArea);
+    auto splitter = new TabSplitter(Qt::Horizontal);
+    splitter->addTab(textArea, "Text Tab");
+    splitter->addTab(digitTextArea, "Digital Tab");
+    splitter->addTab(settingsTab, "Settings Tab");
 
-    setCentralWidget(mainWidget);
+
+    setCentralWidget(splitter);
 
     setupActions();
 }
@@ -59,7 +65,7 @@ void MainWindow::setupActions() {
     KStandardAction::saveAs(this, &MainWindow::saveFileAs, actionCollection());
     KStandardAction::openNew(this, &MainWindow::newFile, actionCollection());
 
-    setupGUI(Default, "yafilesqueezerui.rc");
+    setupGUI(Default, "ya-fsqueezerui.rc");
 }
 
 void MainWindow::newFile() {

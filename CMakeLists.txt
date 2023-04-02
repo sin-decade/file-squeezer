@@ -36,9 +36,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 set(ya-fsqueezer_SRCS src/main.cpp src/mainwindow.cpp
-        src/tabs/texttab.cpp src/tabs/digitaltab.cpp
-        src/widgets/basetab.cpp src/widgets/settings.cpp
-        src/controls/digitaltabsettings.cpp src/controls/texttabsettings.cpp)
+        src/tabs/texttab.cpp src/tabs/digitaltab.cpp src/tabs/settingstab.cpp
+        src/widgets/tabsplitter.cpp)
 
 add_executable(ya-fsqueezer ${ya-fsqueezer_SRCS})
 
@@ -55,4 +54,4 @@ target_link_libraries(ya-fsqueezer
         )
 
 install(TARGETS ya-fsqueezer ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-install(FILES src/yafilesqueezerui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/yafilesqueezer)
+install(FILES src/ya-fsqueezerui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/ya-fsqueezer)

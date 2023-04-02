@@ -18,17 +18,38 @@
  *
 */
 
-#ifndef YA_FSQUEEZER_DIGITALSETTINGS_HPP
-#define YA_FSQUEEZER_DIGITALSETTINGS_HPP
 
-// own
-#include "src/widgets/settings.hpp"
+#ifndef YA_FSQUEEZER_TABSPLITTER_HPP
+#define YA_FSQUEEZER_TABSPLITTER_HPP
 
-class DigitalTabSettings : public Settings {
+// Qt
+#include <QSplitter>
+#include <QTabWidget>
+
+class TabSplitter : public QSplitter {
 Q_OBJECT
+
 public:
-    explicit DigitalTabSettings(QWidget *parent = nullptr);
+
+    explicit TabSplitter(Qt::Orientation orientation, QWidget *parent = nullptr);
+
+    void addTab(QWidget *widget, const QString &name);
+
+
+public Q_SLOTS:
+
+    void showMenu(QTabWidget *widget, int index);
+
+private:
+    QList<QPair<QWidget *, QString>> m_tabs;
+
+    void addTabWidget(bool back = true);
+
+    void removeTabWidget(int index);
+
+    void moveTab(int tabIndex, int tabWidgetIndex, int direction = 1);
+
 };
 
 
-#endif //YA_FSQUEEZER_DIGITALSETTINGS_HPP
+#endif //YA_FSQUEEZER_TABSPLITTER_HPP
