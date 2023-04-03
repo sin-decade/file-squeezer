@@ -18,51 +18,19 @@
  *
 */
 
-#ifndef YA_FSQUEEZER_MAINWINDOW_HPP
-#define YA_FSQUEEZER_MAINWINDOW_HPP
+#ifndef YA_FSQUEEZER_SETTINGSTAB_HPP
+#define YA_FSQUEEZER_SETTINGSTAB_HPP
 
-// KF
-#include <KXmlGuiWindow>
 
-class TextTab;
+// Qt
+#include <QWidget>
 
-class DigitalTab;
-
-class KJob;
-
-class QSplitter;
-
-class QTabWidget;
-
-class MainWindow : public KXmlGuiWindow {
+class SettingsTab : public QWidget {
 Q_OBJECT
-
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-
-private Q_SLOTS:
-
-    void newFile();
-
-    void openFile();
-
-    void saveFile();
-
-    void saveFileAs();
-
-    void downloadFinished(KJob *job);
-
-
-private:
-    void setupActions();
-
-    void saveFileToDisk(const QString &outputFileName);
-
-    TextTab *textArea;
-    DigitalTab *digitTextArea;
-    QString fileName;
+    explicit SettingsTab(QWidget *parent = nullptr);
 
 };
 
 
-#endif //YA_FSQUEEZER_MAINWINDOW_HPP
+#endif //YA_FSQUEEZER_SETTINGSTAB_HPP

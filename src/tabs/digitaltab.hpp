@@ -18,51 +18,22 @@
  *
 */
 
-#ifndef YA_FSQUEEZER_MAINWINDOW_HPP
-#define YA_FSQUEEZER_MAINWINDOW_HPP
+#ifndef YA_FSQUEEZER_DIGITALTAB_HPP
+#define YA_FSQUEEZER_DIGITALTAB_HPP
 
-// KF
-#include <KXmlGuiWindow>
+// own
+#include "texttab.hpp"
 
-class TextTab;
-
-class DigitalTab;
-
-class KJob;
-
-class QSplitter;
-
-class QTabWidget;
-
-class MainWindow : public KXmlGuiWindow {
+class DigitalTab : public TextTab {
 Q_OBJECT
-
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit DigitalTab(QWidget *parent = nullptr);
 
-private Q_SLOTS:
+public Q_SLOTS:
 
-    void newFile();
-
-    void openFile();
-
-    void saveFile();
-
-    void saveFileAs();
-
-    void downloadFinished(KJob *job);
-
-
-private:
-    void setupActions();
-
-    void saveFileToDisk(const QString &outputFileName);
-
-    TextTab *textArea;
-    DigitalTab *digitTextArea;
-    QString fileName;
+    void setDigitText(const QString &text);
 
 };
 
 
-#endif //YA_FSQUEEZER_MAINWINDOW_HPP
+#endif //YA_FSQUEEZER_DIGITALTAB_HPP

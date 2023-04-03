@@ -18,51 +18,38 @@
  *
 */
 
-#ifndef YA_FSQUEEZER_MAINWINDOW_HPP
-#define YA_FSQUEEZER_MAINWINDOW_HPP
 
-// KF
-#include <KXmlGuiWindow>
+#ifndef YA_FSQUEEZER_TABSPLITTER_HPP
+#define YA_FSQUEEZER_TABSPLITTER_HPP
 
-class TextTab;
+// Qt
+#include <QSplitter>
+#include <QTabWidget>
 
-class DigitalTab;
-
-class KJob;
-
-class QSplitter;
-
-class QTabWidget;
-
-class MainWindow : public KXmlGuiWindow {
+class TabSplitter : public QSplitter {
 Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
 
-private Q_SLOTS:
+    explicit TabSplitter(Qt::Orientation orientation, QWidget *parent = nullptr);
 
-    void newFile();
+    void addTab(QWidget *widget, const QString &name);
 
-    void openFile();
 
-    void saveFile();
+public Q_SLOTS:
 
-    void saveFileAs();
-
-    void downloadFinished(KJob *job);
-
+    void showMenu(QTabWidget *widget, int index);
 
 private:
-    void setupActions();
+    QList<QPair<QWidget *, QString>> m_tabs;
 
-    void saveFileToDisk(const QString &outputFileName);
+    void addTabWidget(bool back = true);
 
-    TextTab *textArea;
-    DigitalTab *digitTextArea;
-    QString fileName;
+    void removeTabWidget(int index);
+
+    void moveTab(int tabIndex, int tabWidgetIndex, int direction = 1);
 
 };
 
 
-#endif //YA_FSQUEEZER_MAINWINDOW_HPP
+#endif //YA_FSQUEEZER_TABSPLITTER_HPP

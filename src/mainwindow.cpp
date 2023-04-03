@@ -1,14 +1,34 @@
+/*
+ *   The GNU General Public License v3.0
+ *
+ *   Copyright (C) 2023 Yaroslav Riabtsev <yaroslav.riabtsev@rwth-aachen.de>
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+*/
 
 // Qt
 #include <QApplication>
-#include <QAction>
 #include <QSaveFile>
 #include <QFileDialog>
 #include <QTextStream>
 #include <QByteArray>
 #include <QBoxLayout>
+#include <QDebug>
+#include <QTabBar>
+#include <QMenu>
 // KF
-#include <KTextEdit>
 #include <KLocalizedString>
 #include <KActionCollection>
 #include <KStandardAction>
@@ -16,17 +36,24 @@
 #include <KIO/Job>
 // own
 #include "mainwindow.hpp"
+#include "tabs/texttab.hpp"
+#include "tabs/digitaltab.hpp"
+#include "src/tabs/settingstab.hpp"
+#include "src/widgets/tabsplitter.hpp"
+
 
 MainWindow::MainWindow(QWidget *parent) : KXmlGuiWindow(parent) {
-    textArea = new KTextEdit();
-    digitTextArea = new KTextEdit();
+    textArea = new TextTab();
+    digitTextArea = new DigitalTab();
+    auto settingsTab = new SettingsTab();
 
-    auto* mainWidget = new QWidget;
-    auto* texts = new QHBoxLayout(mainWidget);
-    texts->addWidget(textArea);
-    texts->addWidget(digitTextArea);
+    auto splitter = new TabSplitter(Qt::Horizontal);
+    splitter->addTab(textArea, "Text Tab");
+    splitter->addTab(digitTextArea, "Digital Tab");
+    splitter->addTab(settingsTab, "Settings Tab");
 
-    setCentralWidget(mainWidget);
+
+    setCentralWidget(splitter);
 
     setupActions();
 }
@@ -38,7 +65,7 @@ void MainWindow::setupActions() {
     KStandardAction::saveAs(this, &MainWindow::saveFileAs, actionCollection());
     KStandardAction::openNew(this, &MainWindow::newFile, actionCollection());
 
-    setupGUI(Default, "yafilesqueezerui.rc");
+    setupGUI(Default, "ya-fsqueezerui.rc");
 }
 
 void MainWindow::newFile() {
@@ -99,7 +126,7 @@ void MainWindow::downloadFinished(KJob *job) {
     if (storedJob) {
         auto txt = QTextStream(storedJob->data(), QIODevice::ReadOnly).readAll();
         textArea->setPlainText(txt);
-        digitTextArea->setPlainText(txt);
+        digitTextArea->setDigitText(txt);
     }
 }
 
