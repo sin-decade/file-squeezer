@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 
-project(ya-fsqueezer)
+project(file-squeezer)
 
 set(QT_MIN_VERSION "5.15.2")
 set(KF5_MIN_VERSION "5.78.0")
@@ -35,13 +35,13 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-set(ya-fsqueezer_SRCS src/main.cpp src/mainwindow.cpp
+set(file-squeezer_SRCS src/main.cpp src/mainwindow.cpp
         src/tabs/texttab.cpp src/tabs/digitaltab.cpp src/tabs/settingstab.cpp
         src/widgets/tabsplitter.cpp)
 
-add_executable(ya-fsqueezer ${ya-fsqueezer_SRCS})
+add_executable(file-squeezer ${file-squeezer_SRCS})
 
-target_link_libraries(ya-fsqueezer
+target_link_libraries(file-squeezer
         Qt5::Widgets
         Qt5::Svg
         KF5::CoreAddons
@@ -53,5 +53,5 @@ target_link_libraries(ya-fsqueezer
         KF5::KIOCore
         )
 
-install(TARGETS ya-fsqueezer ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-install(FILES src/ya-fsqueezerui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/ya-fsqueezer)
+install(TARGETS file-squeezer ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(FILES src/file-squeezerui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/file-squeezer)

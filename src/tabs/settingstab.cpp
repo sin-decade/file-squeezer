@@ -18,9 +18,14 @@
  *
 */
 
+// Qt
+#include <QSlider>
+#include <QBoxLayout>
 // own
 #include "settingstab.hpp"
 
 SettingsTab::SettingsTab(QWidget *parent) : QWidget(parent) {
-
+    auto* layout = new QVBoxLayout(this);
+    layout->addWidget(new QSlider(Qt::Horizontal));
+    layout->addWidget(new QSlider);
 }
