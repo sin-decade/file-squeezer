@@ -18,8 +18,8 @@
  *
 */
 
-#ifndef YA_FSQUEEZER_TEXTTAB_HPP
-#define YA_FSQUEEZER_TEXTTAB_HPP
+#ifndef FILE_SQUEEZER_TEXTTAB_HPP
+#define FILE_SQUEEZER_TEXTTAB_HPP
 
 // KF
 #include <KTextEdit>
@@ -31,4 +31,4 @@ public:
 };
 
 
-#endif //YA_FSQUEEZER_TEXTTAB_HPP
+#endif //FILE_SQUEEZER_TEXTTAB_HPP

@@ -29,18 +29,18 @@
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
-    KLocalizedString::setApplicationDomain("ya-fsqueezer");
+    KLocalizedString::setApplicationDomain("file-squeezer");
 
     KAboutData aboutData(
-            QStringLiteral("ya-fsqueezer"),
-            i18n("YaFileSqueezer"),
+            QStringLiteral("file-squeezer"),
+            i18n("File-Squeezer"),
             QStringLiteral("1.0"),
             i18n("An interactive file archiver that allows users "
                  "to choose the number of bits in the symbol."),
             KAboutLicense::GPL_V3,
             i18n("(c) 2023, Yaroslav Riabtsev"),
             QString(),
-            QStringLiteral("https://github.com/YaCodeLab/YaFileSqueezer"),
+            QStringLiteral("https://sin-decade.github.io/file-squeezer/"),
             QStringLiteral("yaroslav.riabtsev@rwth-aachen.de"));
 
     aboutData.addAuthor(i18n("Yaroslav Riabtsev"), i18n("Original author"),

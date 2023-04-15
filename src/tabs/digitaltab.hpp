@@ -18,8 +18,8 @@
  *
 */
 
-#ifndef YA_FSQUEEZER_DIGITALTAB_HPP
-#define YA_FSQUEEZER_DIGITALTAB_HPP
+#ifndef FILE_SQUEEZER_DIGITALTAB_HPP
+#define FILE_SQUEEZER_DIGITALTAB_HPP
 
 // own
 #include "texttab.hpp"
@@ -36,4 +36,4 @@ public Q_SLOTS:
 };
 
 
-#endif //YA_FSQUEEZER_DIGITALTAB_HPP
+#endif //FILE_SQUEEZER_DIGITALTAB_HPP

@@ -18,8 +18,8 @@
  *
 */
 
-#ifndef YA_FSQUEEZER_MAINWINDOW_HPP
-#define YA_FSQUEEZER_MAINWINDOW_HPP
+#ifndef FILE_SQUEEZER_MAINWINDOW_HPP
+#define FILE_SQUEEZER_MAINWINDOW_HPP
 
 // KF
 #include <KXmlGuiWindow>
@@ -52,7 +52,6 @@ private Q_SLOTS:
 
     void downloadFinished(KJob *job);
 
-
 private:
     void setupActions();
 
@@ -65,4 +64,4 @@ private:
 };
 
 
-#endif //YA_FSQUEEZER_MAINWINDOW_HPP
+#endif //FILE_SQUEEZER_MAINWINDOW_HPP
