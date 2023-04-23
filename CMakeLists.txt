@@ -37,7 +37,7 @@ set(CMAKE_AUTOUIC ON)
 
 set(ya-fsqueezer_SRCS src/main.cpp src/mainwindow.cpp
         src/tabs/texttab.cpp src/tabs/digitaltab.cpp src/tabs/settingstab.cpp
-        src/widgets/tabsplitter.cpp)
+        src/widgets/tabsplitter.cpp src/widgets/spoiler.cpp)
 
 add_executable(ya-fsqueezer ${ya-fsqueezer_SRCS})
 

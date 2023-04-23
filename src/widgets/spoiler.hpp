@@ -18,36 +18,33 @@
  *
 */
 
-#ifndef YA_FSQUEEZER_SETTINGSTAB_HPP
-#define YA_FSQUEEZER_SETTINGSTAB_HPP
-
+#ifndef FILE_SQUEEZER_SPOILER_HPP
+#define FILE_SQUEEZER_SPOILER_HPP
 
 // Qt
 #include <QWidget>
 
-class SettingsTab : public QWidget {
+class QToolButton;
+
+class QScrollArea;
+
+class Spoiler : public QWidget {
 Q_OBJECT
-
 public:
-    explicit SettingsTab(QWidget *parent = nullptr);
+    explicit Spoiler(QWidget *parent = nullptr);
 
-signals:
+    void setContentLayout(QLayout *contentLayout);
 
-//    void digitalLengthChanged(int length);
-//
-//    void digitalNumeralSystemChanged(int numeralSystem);
-//
-//    void textSyntaxHighlightingChanged(QString syntaxHighlighting);
+    void setTitle(const QString &title);
 
-private slots:
+public slots:
 
-//    void onDigitalLengthSliderValueChanged(int value);
-//
-//    void onDigitalNumeralSystemComboBoxCurrentIndexChanged(int index);
-//
-//    void onTextSyntaxHighlightingComboBoxCurrentIndexChanged(int index);
+    void toggle(bool collapsed);
 
+private:
+    QToolButton *toggleButton;
+    QScrollArea *contentArea;
 };
 
 
-#endif //YA_FSQUEEZER_SETTINGSTAB_HPP
+#endif //FILE_SQUEEZER_SPOILER_HPP
