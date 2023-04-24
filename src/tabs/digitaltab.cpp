@@ -28,10 +28,10 @@ DigitalTab::DigitalTab(QWidget *parent) : TextTab(parent) {
 }
 
 void DigitalTab::setDigitText(const QString &text) {
-    QString highlightedText = "";
+    QString digitalizedText = "";
     for (auto &symbol: text) {
         QString asciiCode = QString::number(symbol.unicode());
-        highlightedText.append(asciiCode);
+        digitalizedText.append(asciiCode);
     }
-    setPlainText(highlightedText);
+    setPlainText(digitalizedText);
 }

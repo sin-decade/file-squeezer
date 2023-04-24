@@ -52,6 +52,8 @@ MainWindow::MainWindow(QWidget *parent) : KXmlGuiWindow(parent) {
     splitter->addTab(digitTextArea, "Digital Tab");
     splitter->addTab(settingsTab, "Settings Tab");
 
+    connect(settingsTab, &SettingsTab::syntaxHighlightingChanged,
+            textArea, &TextTab::setHighlightingStyle);
 
     setCentralWidget(splitter);
 
@@ -125,7 +127,7 @@ void MainWindow::downloadFinished(KJob *job) {
 
     if (storedJob) {
         auto txt = QTextStream(storedJob->data(), QIODevice::ReadOnly).readAll();
-        textArea->setPlainText(txt);
+        textArea->setText(txt);
         digitTextArea->setDigitText(txt);
     }
 }

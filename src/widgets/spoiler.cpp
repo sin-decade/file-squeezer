@@ -39,7 +39,7 @@ Spoiler::Spoiler(QWidget *parent) : QWidget(parent) {
     toggleButton->setCheckable(true);
     toggleButton->setChecked(false);
 
-    contentArea->setSizePolicy(QSizePolicy::Policy::Maximum, QSizePolicy::Policy::Maximum);
+    setSizePolicy(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Maximum);
     contentArea->hide();
 
     mainLayout->addWidget(toggleButton);
@@ -58,7 +58,7 @@ void Spoiler::setContentLayout(QLayout *contentLayout) {
     delete contentArea->layout();
 
     contentArea->setLayout(contentLayout);
-    contentArea->setMaximumSize(contentLayout->minimumSize());
+    contentArea->setMaximumHeight(contentLayout->minimumSize().height());
 }
 
 void Spoiler::setTitle(const QString &title) {

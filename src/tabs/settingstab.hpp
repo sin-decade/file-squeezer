@@ -33,20 +33,7 @@ public:
 
 signals:
 
-//    void digitalLengthChanged(int length);
-//
-//    void digitalNumeralSystemChanged(int numeralSystem);
-//
-//    void textSyntaxHighlightingChanged(QString syntaxHighlighting);
-
-private slots:
-
-//    void onDigitalLengthSliderValueChanged(int value);
-//
-//    void onDigitalNumeralSystemComboBoxCurrentIndexChanged(int index);
-//
-//    void onTextSyntaxHighlightingComboBoxCurrentIndexChanged(int index);
-
+    void syntaxHighlightingChanged(int index);
 };
 
 

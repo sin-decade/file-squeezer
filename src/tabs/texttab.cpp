@@ -18,9 +18,30 @@
  *
 */
 
+// Qt
+#include <QDebug>
 // own
 #include "texttab.hpp"
 
 TextTab::TextTab(QWidget *parent) : KTextEdit(parent) {
 
+}
+
+void TextTab::setHighlightingStyle(int index) {
+    QTextDocument *document = this->document();
+
+    if (index == 0) {
+        document->setPlainText(body);
+    } else if (index == 1) {
+        document->setMarkdown(body);
+    } else if (index == 2) {
+        document->setHtml(body);
+    }
+
+    currentType = index;
+}
+
+void TextTab::setText(const QString &text) {
+    body = text;
+    setHighlightingStyle(currentType);
 }

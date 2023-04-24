@@ -35,25 +35,38 @@ SettingsTab::SettingsTab(QWidget *parent) : QWidget(parent) {
     {
         auto *layout = new QVBoxLayout;
 
+        auto *digitalLengthLayout = new QHBoxLayout;
+        auto *digitalNumeralSystemLayout = new QHBoxLayout;
         auto *digitalLengthLabel = new QLabel("Length (in bits) of the symbol:");
-        auto *digitalNumeralSystemLabel = new QLabel("Numeral System to display the symbol:");
+        auto *digitalNumeralSystemLabel = new QLabel("Numeral System:");
+        auto *digitalLengthValue = new QLabel;
+        auto *digitalNumeralSystemValue = new QLabel;
         auto *digitalLengthSlider = new QSlider(Qt::Horizontal);
         auto *digitalNumeralSystemSlider = new QSlider(Qt::Horizontal);
 
         digitalLengthSlider->setMinimum(1);
         digitalLengthSlider->setMaximum(64);
+        connect(digitalLengthSlider, &QSlider::valueChanged, this,
+                [=](qint32 value) { digitalLengthValue->setText(QString::number(value)); });
         digitalLengthSlider->setValue(8);
-//    connect(digitalLengthSlider, &QSlider::valueChanged, this, &SettingsTab::onDigitalLengthSliderValueChanged);
 
         digitalNumeralSystemSlider->setMinimum(2);
         digitalNumeralSystemSlider->setMaximum(16);
+        connect(digitalNumeralSystemSlider, &QSlider::valueChanged, this,
+                [=](qint32 value) { digitalNumeralSystemValue->setText(QString::number(value)); });
         digitalNumeralSystemSlider->setValue(10);
-//    connect(digitalNumeralSystemSlider, &QSlider::valueChanged, this, &SettingsTab::onDigitalLengthSliderValueChanged);
 
+        digitalLengthLayout->addWidget(digitalLengthLabel);
+        digitalLengthLayout->addStretch();
+        digitalLengthLayout->addWidget(digitalLengthValue);
 
-        layout->addWidget(digitalLengthLabel);
+        digitalNumeralSystemLayout->addWidget(digitalNumeralSystemLabel);
+        digitalNumeralSystemLayout->addStretch();
+        digitalNumeralSystemLayout->addWidget(digitalNumeralSystemValue);
+
+        layout->addLayout(digitalLengthLayout);
         layout->addWidget(digitalLengthSlider);
-        layout->addWidget(digitalNumeralSystemLabel);
+        layout->addLayout(digitalNumeralSystemLayout);
         layout->addWidget(digitalNumeralSystemSlider);
 
         spoilerDT->setContentLayout(layout);
@@ -65,7 +78,8 @@ SettingsTab::SettingsTab(QWidget *parent) : QWidget(parent) {
         textSyntaxHighlightingComboBox->addItem("None");
         textSyntaxHighlightingComboBox->addItem("Markdown");
         textSyntaxHighlightingComboBox->addItem("HTML");
-//        connect(textSyntaxHighlightingComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsTab::onTextSyntaxHighlightingComboBoxCurrentIndexChanged);
+        connect(textSyntaxHighlightingComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+                this, &SettingsTab::syntaxHighlightingChanged);
 
         layout->addWidget(textSyntaxHighlightingLabel);
         layout->addWidget(textSyntaxHighlightingComboBox);
