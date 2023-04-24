@@ -54,6 +54,10 @@ MainWindow::MainWindow(QWidget *parent) : KXmlGuiWindow(parent) {
 
     connect(settingsTab, &SettingsTab::syntaxHighlightingChanged,
             textArea, &TextTab::setHighlightingStyle);
+    connect(settingsTab, &SettingsTab::digitalLengthChanged,
+            digitTextArea, &DigitalTab::setSymbolLength);
+    connect(settingsTab, &SettingsTab::digitalNumeralSystemChanged,
+            digitTextArea, &DigitalTab::setNumeralSystem);
 
     setCentralWidget(splitter);
 

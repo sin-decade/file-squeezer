@@ -28,10 +28,44 @@ DigitalTab::DigitalTab(QWidget *parent) : TextTab(parent) {
 }
 
 void DigitalTab::setDigitText(const QString &text) {
-    QString digitalizedText = "";
+    digitalization.clear();
     for (auto &symbol: text) {
-        QString asciiCode = QString::number(symbol.unicode());
-        digitalizedText.append(asciiCode);
+        digitalization.push_back(symbol.unicode());
     }
+    setSymbolLength(symbolLength);
+}
+
+void DigitalTab::setNumeralSystem(int value) {
+    QString digitalizedText = "";
+    for (auto digit: digitalization) {
+        digitalizedText.append(castToNS(digit, value, isCapital));
+    }
+    numeralSystem = value;
     setPlainText(digitalizedText);
+}
+
+void DigitalTab::setSymbolLength(int value) {
+    // todo
+    symbolLength = value;
+    setNumeralSystem(numeralSystem);
+}
+
+QString DigitalTab::castToNS(qint64 value, int ns, bool isCapital) {
+    QString code = "";
+    while (value) {
+        char c = value % ns;
+        if (c < 10) {
+            c += '0';
+        } else if (isCapital) {
+            c += 'A' - 10;
+        } else {
+            c += 'a' - 10;
+        }
+        code = c + code;
+        value /= ns;
+    }
+    if (code.isEmpty()){
+        code = "0";
+    }
+    return code + "-";
 }

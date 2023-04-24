@@ -34,6 +34,10 @@ public:
 signals:
 
     void syntaxHighlightingChanged(int index);
+
+    void digitalLengthChanged(int value);
+
+    void digitalNumeralSystemChanged(int value);
 };
 
 

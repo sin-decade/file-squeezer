@@ -48,12 +48,14 @@ SettingsTab::SettingsTab(QWidget *parent) : QWidget(parent) {
         digitalLengthSlider->setMaximum(64);
         connect(digitalLengthSlider, &QSlider::valueChanged, this,
                 [=](qint32 value) { digitalLengthValue->setText(QString::number(value)); });
+        connect(digitalLengthSlider, &QSlider::valueChanged, this, &SettingsTab::digitalLengthChanged);
         digitalLengthSlider->setValue(8);
 
         digitalNumeralSystemSlider->setMinimum(2);
-        digitalNumeralSystemSlider->setMaximum(16);
+        digitalNumeralSystemSlider->setMaximum(11 + 'Z' - 'A');
         connect(digitalNumeralSystemSlider, &QSlider::valueChanged, this,
                 [=](qint32 value) { digitalNumeralSystemValue->setText(QString::number(value)); });
+        connect(digitalNumeralSystemSlider, &QSlider::valueChanged, this, &SettingsTab::digitalNumeralSystemChanged);
         digitalNumeralSystemSlider->setValue(10);
 
         digitalLengthLayout->addWidget(digitalLengthLabel);

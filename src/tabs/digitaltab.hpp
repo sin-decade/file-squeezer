@@ -29,10 +29,23 @@ Q_OBJECT
 public:
     explicit DigitalTab(QWidget *parent = nullptr);
 
+    static QString castToNS(qint64 value, int ns, bool isCapital = true);
+
+public slots:
+
+    void setSymbolLength(int value);
+
+    void setNumeralSystem(int value);
+
 public Q_SLOTS:
 
     void setDigitText(const QString &text);
 
+private:
+    QVector<qint64> digitalization;
+    int numeralSystem = 10;
+    int symbolLength = 8;
+    bool isCapital = true;
 };
 
 
