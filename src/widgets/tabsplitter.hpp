@@ -19,8 +19,8 @@
 */
 
 
-#ifndef YA_FSQUEEZER_TABSPLITTER_HPP
-#define YA_FSQUEEZER_TABSPLITTER_HPP
+#ifndef FILE_SQUEEZER_TABSPLITTER_HPP
+#define FILE_SQUEEZER_TABSPLITTER_HPP
 
 // Qt
 #include <QSplitter>
@@ -31,7 +31,7 @@ Q_OBJECT
 
 public:
 
-    explicit TabSplitter(Qt::Orientation orientation, QWidget *parent = nullptr);
+    explicit TabSplitter(Qt::Orientation orientation = Qt::Horizontal, QWidget *parent = nullptr);
 
     void addTab(QWidget *widget, const QString &name);
 
@@ -52,4 +52,4 @@ private:
 };
 
 
-#endif //YA_FSQUEEZER_TABSPLITTER_HPP
+#endif //FILE_SQUEEZER_TABSPLITTER_HPP

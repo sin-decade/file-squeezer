@@ -1,5 +1,5 @@
-# Doxyfile for YaFileSqueezer
-PROJECT_NAME           = "YaFileSqueezer"
+# Doxyfile for File-Squeezer
+PROJECT_NAME           = "File-Squeezer"
 PROJECT_NUMBER         = 1.0
 PROJECT_BRIEF          = "An interactive file archiver that allows users to"\
                          "choose the number of bits in the symbol. "

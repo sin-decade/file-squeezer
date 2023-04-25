@@ -46,7 +46,7 @@ void TabSplitter::addTabWidget(bool back) {
 void TabSplitter::addTab(QWidget *widget, const QString &name) {
     m_tabs.append({widget, name});
     if (count() == 0) {
-        addTabWidget(1);
+        addTabWidget(true);
     }
     qobject_cast<QTabWidget *>(this->widget(0))->addTab(widget, name);
 }

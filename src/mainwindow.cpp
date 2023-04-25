@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent) : KXmlGuiWindow(parent) {
     digitTextArea = new DigitalTab();
     auto settingsTab = new SettingsTab();
 
-    auto splitter = new TabSplitter(Qt::Horizontal);
+    auto splitter = new TabSplitter;
     splitter->addTab(textArea, "Text Tab");
     splitter->addTab(digitTextArea, "Digital Tab");
     splitter->addTab(settingsTab, "Settings Tab");
@@ -78,7 +78,7 @@ void MainWindow::setupActions() {
     KStandardAction::saveAs(this, &MainWindow::saveFileAs, actionCollection());
     KStandardAction::openNew(this, &MainWindow::newFile, actionCollection());
 
-    setupGUI(Default, "ya-fsqueezerui.rc");
+    setupGUI(Default, "file-squeezerui.rc");
 }
 
 void MainWindow::newFile() {
