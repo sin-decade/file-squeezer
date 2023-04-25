@@ -38,6 +38,12 @@ signals:
     void digitalLengthChanged(int value);
 
     void digitalNumeralSystemChanged(int value);
+
+    void isCapitalChanged(bool isCapital);
+
+    void withSeparatorChanged(bool isCapital);
+
+    void withLeadingZerosChanged(bool isCapital);
 };
 
 

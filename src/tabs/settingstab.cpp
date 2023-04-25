@@ -23,6 +23,8 @@
 #include <QBoxLayout>
 #include <QLabel>
 #include <QComboBox>
+#include <QFormLayout>
+#include <QCheckBox>
 // own
 #include "settingstab.hpp"
 #include "src/widgets/spoiler.hpp"
@@ -43,6 +45,18 @@ SettingsTab::SettingsTab(QWidget *parent) : QWidget(parent) {
         auto *digitalNumeralSystemValue = new QLabel;
         auto *digitalLengthSlider = new QSlider(Qt::Horizontal);
         auto *digitalNumeralSystemSlider = new QSlider(Qt::Horizontal);
+        auto *checkboxes = new QFormLayout;
+        checkboxes->setFormAlignment(Qt::AlignLeft);
+        auto *isCapital = new QCheckBox();
+        connect(isCapital, &QCheckBox::stateChanged, this, &SettingsTab::isCapitalChanged);
+        auto *withSeparator = new QCheckBox();
+        connect(withSeparator, &QCheckBox::stateChanged, this, &SettingsTab::withSeparatorChanged);
+        auto *withLeadingZeros = new QCheckBox();
+        connect(withLeadingZeros, &QCheckBox::stateChanged, this, &SettingsTab::withLeadingZerosChanged);
+
+        checkboxes->addRow(isCapital,new QLabel("is capital"));
+        checkboxes->addRow(withSeparator, new QLabel("with separator"));
+        checkboxes->addRow(withLeadingZeros, new QLabel("with leading zeros"));
 
         digitalLengthSlider->setMinimum(1);
         digitalLengthSlider->setMaximum(64);
@@ -70,6 +84,7 @@ SettingsTab::SettingsTab(QWidget *parent) : QWidget(parent) {
         layout->addWidget(digitalLengthSlider);
         layout->addLayout(digitalNumeralSystemLayout);
         layout->addWidget(digitalNumeralSystemSlider);
+        layout->addLayout(checkboxes);
 
         spoilerDT->setContentLayout(layout);
     }

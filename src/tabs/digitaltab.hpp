@@ -21,6 +21,8 @@
 #ifndef YA_FSQUEEZER_DIGITALTAB_HPP
 #define YA_FSQUEEZER_DIGITALTAB_HPP
 
+// Qt
+#include <QBitArray>
 // own
 #include "texttab.hpp"
 
@@ -29,7 +31,7 @@ Q_OBJECT
 public:
     explicit DigitalTab(QWidget *parent = nullptr);
 
-    static QString castToNS(qint64 value, int ns, bool isCapital = true);
+    void updateText();
 
 public slots:
 
@@ -37,15 +39,26 @@ public slots:
 
     void setNumeralSystem(int value);
 
+    void setIsCapital(bool value);
+
+    void setWithSeparator(bool value);
+
+    void setWithLeadingZero(bool value);
+
 public Q_SLOTS:
 
     void setDigitText(const QString &text);
 
 private:
-    QVector<qint64> digitalization;
+    QBitArray bitVector;
     int numeralSystem = 10;
+    int fieldWidth = 3;
     int symbolLength = 8;
-    bool isCapital = true;
+    bool isCapital = false;
+    bool withSeparator = false;
+    bool withLeadingZeros = false;
+
+    int extractBitArraySymbol(int startIndex);
 };
 
 

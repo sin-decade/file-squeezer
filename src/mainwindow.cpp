@@ -59,6 +59,13 @@ MainWindow::MainWindow(QWidget *parent) : KXmlGuiWindow(parent) {
     connect(settingsTab, &SettingsTab::digitalNumeralSystemChanged,
             digitTextArea, &DigitalTab::setNumeralSystem);
 
+    connect(settingsTab, &SettingsTab::isCapitalChanged,
+            digitTextArea, &DigitalTab::setIsCapital);
+    connect(settingsTab, &SettingsTab::withLeadingZerosChanged,
+            digitTextArea, &DigitalTab::setWithLeadingZero);
+    connect(settingsTab, &SettingsTab::withSeparatorChanged,
+            digitTextArea, &DigitalTab::setWithSeparator);
+
     setCentralWidget(splitter);
 
     setupActions();
