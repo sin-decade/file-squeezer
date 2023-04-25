@@ -52,6 +52,19 @@ MainWindow::MainWindow(QWidget *parent) : KXmlGuiWindow(parent) {
     splitter->addTab(digitTextArea, "Digital Tab");
     splitter->addTab(settingsTab, "Settings Tab");
 
+    connect(settingsTab, &SettingsTab::syntaxHighlightingChanged,
+            textArea, &TextTab::setHighlightingStyle);
+    connect(settingsTab, &SettingsTab::digitalLengthChanged,
+            digitTextArea, &DigitalTab::setSymbolLength);
+    connect(settingsTab, &SettingsTab::digitalNumeralSystemChanged,
+            digitTextArea, &DigitalTab::setNumeralSystem);
+
+    connect(settingsTab, &SettingsTab::isCapitalChanged,
+            digitTextArea, &DigitalTab::setIsCapital);
+    connect(settingsTab, &SettingsTab::withLeadingZerosChanged,
+            digitTextArea, &DigitalTab::setWithLeadingZero);
+    connect(settingsTab, &SettingsTab::withSeparatorChanged,
+            digitTextArea, &DigitalTab::setWithSeparator);
 
     setCentralWidget(splitter);
 
@@ -125,7 +138,7 @@ void MainWindow::downloadFinished(KJob *job) {
 
     if (storedJob) {
         auto txt = QTextStream(storedJob->data(), QIODevice::ReadOnly).readAll();
-        textArea->setPlainText(txt);
+        textArea->setText(txt);
         digitTextArea->setDigitText(txt);
     }
 }

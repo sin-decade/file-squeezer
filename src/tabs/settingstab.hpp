@@ -27,9 +27,23 @@
 
 class SettingsTab : public QWidget {
 Q_OBJECT
+
 public:
     explicit SettingsTab(QWidget *parent = nullptr);
 
+signals:
+
+    void syntaxHighlightingChanged(int index);
+
+    void digitalLengthChanged(int value);
+
+    void digitalNumeralSystemChanged(int value);
+
+    void isCapitalChanged(bool isCapital);
+
+    void withSeparatorChanged(bool isCapital);
+
+    void withLeadingZerosChanged(bool isCapital);
 };
 
 

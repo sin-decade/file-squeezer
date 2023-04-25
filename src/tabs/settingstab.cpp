@@ -21,11 +21,91 @@
 // Qt
 #include <QSlider>
 #include <QBoxLayout>
+#include <QLabel>
+#include <QComboBox>
+#include <QFormLayout>
+#include <QCheckBox>
 // own
 #include "settingstab.hpp"
+#include "src/widgets/spoiler.hpp"
 
 SettingsTab::SettingsTab(QWidget *parent) : QWidget(parent) {
-    auto* layout = new QVBoxLayout(this);
-    layout->addWidget(new QSlider(Qt::Horizontal));
-    layout->addWidget(new QSlider);
+    auto *spoilerDT = new Spoiler;
+    spoilerDT->setTitle("Digital Tab");
+    auto *spoilerTT = new Spoiler;
+    spoilerTT->setTitle("Text Tab");
+    {
+        auto *layout = new QVBoxLayout;
+
+        auto *digitalLengthLayout = new QHBoxLayout;
+        auto *digitalNumeralSystemLayout = new QHBoxLayout;
+        auto *digitalLengthLabel = new QLabel("Length (in bits) of the symbol:");
+        auto *digitalNumeralSystemLabel = new QLabel("Numeral System:");
+        auto *digitalLengthValue = new QLabel;
+        auto *digitalNumeralSystemValue = new QLabel;
+        auto *digitalLengthSlider = new QSlider(Qt::Horizontal);
+        auto *digitalNumeralSystemSlider = new QSlider(Qt::Horizontal);
+        auto *checkboxes = new QFormLayout;
+        checkboxes->setFormAlignment(Qt::AlignLeft);
+        auto *isCapital = new QCheckBox();
+        connect(isCapital, &QCheckBox::stateChanged, this, &SettingsTab::isCapitalChanged);
+        auto *withSeparator = new QCheckBox();
+        connect(withSeparator, &QCheckBox::stateChanged, this, &SettingsTab::withSeparatorChanged);
+        auto *withLeadingZeros = new QCheckBox();
+        connect(withLeadingZeros, &QCheckBox::stateChanged, this, &SettingsTab::withLeadingZerosChanged);
+
+        checkboxes->addRow(isCapital,new QLabel("is capital"));
+        checkboxes->addRow(withSeparator, new QLabel("with separator"));
+        checkboxes->addRow(withLeadingZeros, new QLabel("with leading zeros"));
+
+        digitalLengthSlider->setMinimum(1);
+        digitalLengthSlider->setMaximum(64);
+        connect(digitalLengthSlider, &QSlider::valueChanged, this,
+                [=](qint32 value) { digitalLengthValue->setText(QString::number(value)); });
+        connect(digitalLengthSlider, &QSlider::valueChanged, this, &SettingsTab::digitalLengthChanged);
+        digitalLengthSlider->setValue(8);
+
+        digitalNumeralSystemSlider->setMinimum(2);
+        digitalNumeralSystemSlider->setMaximum(11 + 'Z' - 'A');
+        connect(digitalNumeralSystemSlider, &QSlider::valueChanged, this,
+                [=](qint32 value) { digitalNumeralSystemValue->setText(QString::number(value)); });
+        connect(digitalNumeralSystemSlider, &QSlider::valueChanged, this, &SettingsTab::digitalNumeralSystemChanged);
+        digitalNumeralSystemSlider->setValue(10);
+
+        digitalLengthLayout->addWidget(digitalLengthLabel);
+        digitalLengthLayout->addStretch();
+        digitalLengthLayout->addWidget(digitalLengthValue);
+
+        digitalNumeralSystemLayout->addWidget(digitalNumeralSystemLabel);
+        digitalNumeralSystemLayout->addStretch();
+        digitalNumeralSystemLayout->addWidget(digitalNumeralSystemValue);
+
+        layout->addLayout(digitalLengthLayout);
+        layout->addWidget(digitalLengthSlider);
+        layout->addLayout(digitalNumeralSystemLayout);
+        layout->addWidget(digitalNumeralSystemSlider);
+        layout->addLayout(checkboxes);
+
+        spoilerDT->setContentLayout(layout);
+    }
+    {
+        auto *layout = new QVBoxLayout;
+        auto *textSyntaxHighlightingLabel = new QLabel("Syntax Highlighting:");
+        auto *textSyntaxHighlightingComboBox = new QComboBox;
+        textSyntaxHighlightingComboBox->addItem("None");
+        textSyntaxHighlightingComboBox->addItem("Markdown");
+        textSyntaxHighlightingComboBox->addItem("HTML");
+        connect(textSyntaxHighlightingComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+                this, &SettingsTab::syntaxHighlightingChanged);
+
+        layout->addWidget(textSyntaxHighlightingLabel);
+        layout->addWidget(textSyntaxHighlightingComboBox);
+        spoilerTT->setContentLayout(layout);
+    }
+
+    auto *layout = new QVBoxLayout;
+    layout->addWidget(spoilerDT);
+    layout->addWidget(spoilerTT);
+    layout->addStretch();
+    setLayout(layout);
 }

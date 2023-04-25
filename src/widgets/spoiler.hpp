@@ -18,48 +18,33 @@
  *
 */
 
-#ifndef FILE_SQUEEZER_DIGITALTAB_HPP
-#define FILE_SQUEEZER_DIGITALTAB_HPP
+#ifndef FILE_SQUEEZER_SPOILER_HPP
+#define FILE_SQUEEZER_SPOILER_HPP
 
 // Qt
-#include <QBitArray>
-// own
-#include "texttab.hpp"
+#include <QWidget>
 
-class DigitalTab : public TextTab {
+class QToolButton;
+
+class QScrollArea;
+
+class Spoiler : public QWidget {
 Q_OBJECT
 public:
-    explicit DigitalTab(QWidget *parent = nullptr);
+    explicit Spoiler(QWidget *parent = nullptr);
 
-    void updateText();
+    void setContentLayout(QLayout *contentLayout);
+
+    void setTitle(const QString &title);
 
 public slots:
 
-    void setSymbolLength(int value);
-
-    void setNumeralSystem(int value);
-
-    void setIsCapital(bool value);
-
-    void setWithSeparator(bool value);
-
-    void setWithLeadingZero(bool value);
-
-public Q_SLOTS:
-
-    void setDigitText(const QString &text);
+    void toggle(bool collapsed);
 
 private:
-    QBitArray bitVector;
-    int numeralSystem = 10;
-    int fieldWidth = 3;
-    int symbolLength = 8;
-    bool isCapital = false;
-    bool withSeparator = false;
-    bool withLeadingZeros = false;
-
-    int extractBitArraySymbol(int startIndex);
+    QToolButton *toggleButton;
+    QScrollArea *contentArea;
 };
 
 
-#endif //FILE_SQUEEZER_DIGITALTAB_HPP
+#endif //FILE_SQUEEZER_SPOILER_HPP

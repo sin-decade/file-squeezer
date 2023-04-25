@@ -28,6 +28,17 @@ class TextTab : public KTextEdit {
 Q_OBJECT
 public:
     explicit TextTab(QWidget *parent = nullptr);
+
+public slots:
+
+    void setHighlightingStyle(int index);
+public Q_SLOTS:
+
+    void setText(const QString &text);
+
+private:
+    int currentType = 0;
+    QString body;
 };
 
 
