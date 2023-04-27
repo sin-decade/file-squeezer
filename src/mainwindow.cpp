@@ -40,6 +40,7 @@
 #include "tabs/digitaltab.hpp"
 #include "src/tabs/settingstab.hpp"
 #include "src/widgets/tabsplitter.hpp"
+#include "src/trees/treewidget.hpp"
 
 
 MainWindow::MainWindow(QWidget *parent) : KXmlGuiWindow(parent) {
@@ -65,6 +66,11 @@ MainWindow::MainWindow(QWidget *parent) : KXmlGuiWindow(parent) {
             digitTextArea, &DigitalTab::setWithLeadingZero);
     connect(settingsTab, &SettingsTab::withSeparatorChanged,
             digitTextArea, &DigitalTab::setWithSeparator);
+
+    for (int i = 0; i < 5; i++) {
+        auto *treeWidget = new TreeWidget();
+        splitter->addTab(treeWidget, QString("Tree Tab %1").arg(i));
+    }
 
     setCentralWidget(splitter);
 
