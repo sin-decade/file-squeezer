@@ -68,6 +68,12 @@ public:
     void changePos(qreal ax, qreal ay);
 
     /**
+     * @brief Changes the position of the node.
+     * @param newPos The position.
+     */
+    void changePos(QPointF newPos);
+
+    /**
      * @brief Scales the position of the node.
      * @param ax The horizontal scaling factor.
      * @param ay The vertical scaling factor.
@@ -78,12 +84,17 @@ public:
      * @brief Returns the parent edge of the node.
      * @return The parent edge of the node.
      */
-    QGraphicsLineItem * getParentEdge();
+    QGraphicsLineItem *getParentEdge();
+
+    /**
+     * @brief Changes the order of the two vertices relative to the parent.
+     */
+    void swapPos(Node *right, Node *left);
 
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
 
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
     /**
@@ -106,6 +117,11 @@ private:
      * @return A string representation of the node.
      */
     QString toString() const;
+
+    /**
+     * @brief Changes the position of the edge associated with the node.
+     */
+    void updateEdge();
 
     QGraphicsSimpleTextItem *textItem{}; /**< The text item of the node. */
     QGraphicsLineItem *parentEdge = nullptr; /**< The edge that connects the parent and this node. */

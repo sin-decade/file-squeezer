@@ -18,11 +18,9 @@
  *
 */
 // Qt
-#include <QAction>
 #include <QMenu>
 #include <QPen>
-#include <QApplication>
-#include <utility>
+#include <QGraphicsSceneMouseEvent>
 // own
 #include "node.hpp"
 
@@ -64,16 +62,33 @@ void Node::addTextItem() {
     textItem->setPos(-textRect.width() / 2, -textRect.height() / 2);
 }
 
-void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
-    QGraphicsEllipseItem::mouseDoubleClickEvent(event);
-    auto *menu = new QMenu;
-    QAction *action1 = menu->addAction("Move Left");
-    QAction *action2 = menu->addAction("Move Right");
-    menu->exec(QCursor::pos());
+void Node::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    QGraphicsEllipseItem::mousePressEvent(event);
+    clearFocus();
+    if (event->button() == Qt::RightButton) {
+        if (_parent) {
+            auto children = _parent->getChildren();
+            if (children.size() > 1) {
+                int idx = children.indexOf(this);
+                auto *menu = new QMenu;
+                if (idx > 0) {
+                    menu->addAction("Move Left", [=]() {
+                        swapPos(children[idx - 1], this);
+                    });
+                }
+                if (idx < children.size() - 1)
+                    menu->addAction("Move Right", [=]() {
+                        swapPos(this, children[idx + 1]);
+                    });
+                menu->exec(QCursor::pos());
+            }
+        }
+    }
 }
 
 void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsEllipseItem::mouseMoveEvent(event);
+    clearFocus();
     updateEdge();
 }
 
@@ -103,6 +118,11 @@ void Node::changePos(qreal ax, qreal ay) {
     updateEdge();
 }
 
+void Node::changePos(QPointF newPos) {
+    QGraphicsItem::setPos(newPos);
+    updateEdge();
+}
+
 void Node::updateEdge() {
     if (_parent) {
         QPointF pos = scenePos() - _parent->pos();
@@ -127,6 +147,29 @@ void Node::scalePos(qreal ax, qreal ay) {
 
 QGraphicsLineItem *Node::getParentEdge() {
     return parentEdge;
+}
+
+void Node::swapPos(Node *right, Node *left) {
+    auto tmpPos = left->scenePos();
+    left->changePos(right->scenePos());
+    right->changePos(tmpPos);
+    auto leftChildren = left->getChildren();
+    auto rightChildren = right->getChildren();
+    if (!leftChildren.isEmpty() && !rightChildren.isEmpty()) {
+        int leftSize = leftChildren.size();
+        int rightSize = rightChildren.size();
+        for (int i = 0; i < leftSize / 2; i++) {
+            swapPos(leftChildren[i], leftChildren[leftSize - i - 1]);
+        }
+        for (int i = 0; i < rightSize / 2; i++) {
+            swapPos(rightChildren[i], rightChildren[rightSize - i - 1]);
+        }
+        for (int i = 0, j = rightSize + leftSize - 1; i < j; i++, j--) {
+            auto *leftNode = i < leftSize ? leftChildren[i] : rightChildren[i - leftSize];
+            auto *rightNode = j < leftSize ? leftChildren[j] : rightChildren[j - leftSize];
+            swapPos(leftNode, rightNode);
+        }
+    }
 }
 
 
