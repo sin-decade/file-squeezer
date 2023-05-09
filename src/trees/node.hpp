@@ -17,80 +17,105 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 */
-
-
 #ifndef FILE_SQUEEZER_NODE_HPP
 #define FILE_SQUEEZER_NODE_HPP
 
-
-class NodeGraphicsItem;
+#include <QGraphicsEllipseItem>
 
 /**
- * @brief The Node class represents a node in a binary tree.
+ * @brief The Node class represents a node in a tree.
  */
-class Node {
+class Node : public QGraphicsEllipseItem {
 public:
     /**
-     * @brief Constructs a node with the given key.
-     *
-     * @param key The key value associated with this node.
+     * @brief Constructs a node with a given key value and a parent item.
+     * @param key The key value of the node.
+     * @param parent The parent item of the node.
      */
-    explicit Node(int key);
+    explicit Node(int key, QGraphicsItem *parent = nullptr);
 
     /**
-     * @brief Constructs a node with the given children.
-     *
-     * @param children A vector containing pointers to the children of this node.
+     * @brief Constructs a node with a vector of children and a parent item.
+     * @param children The vector of children of the node.
+     * @param parent The parent item of the node.
      */
-    explicit Node(const QVector<Node *> &children);
+    explicit Node(QVector<Node *> children, QGraphicsItem *parent = nullptr);
 
     /**
-     * @brief Returns a string representation of this node.
-     *
-     * @return A string containing the key value of this node.
+     * @brief Sets the parent node and the edge that connects the parent and this node.
+     * @param node The parent node.
+     * @param edge The edge that connects the parent and this node.
      */
-    QString toString() const;
+    void setParent(Node *node, QGraphicsLineItem *edge);
 
     /**
-     * @brief Sets the graphics item associated with this node.
-     *
-     * @param nodeItem A pointer to the graphics item representing this node.
-     */
-    void setItem(NodeGraphicsItem *nodeItem);
-
-    /**
-     * @brief Returns the graphics item associated with this node.
-     *
-     * @return A pointer to the graphics item representing this node.
-     */
-    NodeGraphicsItem *getItem() const;
-
-    /**
-     * @brief Sets the parent of this node.
-     *
-     * @param node A pointer to the parent node.
-     */
-    void setParent(Node *node);
-
-    /**
-     * @brief Returns the parent of this node.
-     *
-     * @return A pointer to the parent node.
-     */
-    Node *getParent() const;
-
-    /**
-     * @brief Returns the children of this node.
-     *
-     * @return A vector containing pointers to the children of this node.
+     * @brief Returns the vector of children of the node.
+     * @return The vector of children of the node.
      */
     QVector<Node *> getChildren() const;
 
+    /**
+     * @brief Returns the depth of the node in the tree.
+     * @return The depth of the node in the tree.
+     */
+    int getDepth() const;
+
+    /**
+     * @brief Changes the position of the node.
+     * @param ax The horizontal displacement.
+     * @param ay The vertical displacement.
+     */
+    void changePos(qreal ax, qreal ay);
+
+    /**
+     * @brief Scales the position of the node.
+     * @param ax The horizontal scaling factor.
+     * @param ay The vertical scaling factor.
+     */
+    void scalePos(qreal ax, qreal ay);
+
+    /**
+     * @brief Returns the parent edge of the node.
+     * @return The parent edge of the node.
+     */
+    QGraphicsLineItem * getParentEdge();
+
+protected:
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+
 private:
-    int m_key = 0; /**< The key value associated with this node. */
-    NodeGraphicsItem *m_item = nullptr; /**< A pointer to the graphics item representing this node. */
-    Node *m_parent = nullptr; /**< A pointer to the parent node. */
-    QVector<Node *> m_children; /**< A vector containing pointers to the children of this node. */
+    /**
+     * @brief Sets the graphic properties of the node.
+     */
+    void setGraphic();
+
+    /**
+     * @brief Adds a text item to the node.
+     */
+    void addTextItem();
+
+    /**
+     * @brief Adds edges to the children of the node.
+     */
+    void addLinks();
+
+    /**
+     * @brief Returns a string representation of the node.
+     * @return A string representation of the node.
+     */
+    QString toString() const;
+
+    QGraphicsSimpleTextItem *textItem{}; /**< The text item of the node. */
+    QGraphicsLineItem *parentEdge = nullptr; /**< The edge that connects the parent and this node. */
+
+    Node *_parent = nullptr; /**< The parent node of the node. */
+    QVector<Node *> _children; /**< The vector of children of the node. */
+    int _key = 0; /**< The key value of the node. */
+    int _depth = 0; /**< The _depth of the node in the tree. */
+    qreal _radius = 10; /**< The _radius of the node. */
 };
 
 #endif //FILE_SQUEEZER_NODE_HPP
+

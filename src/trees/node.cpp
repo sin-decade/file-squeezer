@@ -17,45 +17,116 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 */
-
+// Qt
+#include <QAction>
+#include <QMenu>
+#include <QPen>
+#include <QApplication>
+#include <utility>
 // own
-#include "nodegraphicsitem.hpp"
 #include "node.hpp"
 
-Node::Node(int key)
-        : m_key(key) {
+Node::Node(int key, QGraphicsItem *parent)
+        : QGraphicsEllipseItem(parent), _key(key) {
+    setGraphic();
+    addTextItem();
+    _depth = 1;
 }
 
-Node::Node(const QVector<Node *> &children)
-        : m_children(children) {
-    for (auto *child: m_children) {
-        child->setParent(this);
+
+Node::Node(QVector<Node *> children, QGraphicsItem *parent)
+        : QGraphicsEllipseItem(parent), _children(std::move(children)) {
+    setGraphic();
+    addLinks();
+}
+
+void Node::addLinks() {
+    for (auto &child: _children) {
+        _depth = qMax(_depth, child->getDepth() + 1);
+        auto *edge = new QGraphicsLineItem(this);
+        edge->setPen(QPen(Qt::white));
+        child->setParent(this, edge);
     }
+}
+
+void Node::setGraphic() {
+    setFlag(ItemIsMovable);
+    setPen(QPen(Qt::white));
+    setBrush(QBrush(Qt::blue));
+    setRect(-_radius, -_radius, 2 * _radius, 2 * _radius);
+}
+
+void Node::addTextItem() {
+    textItem = new QGraphicsSimpleTextItem(toString());
+    textItem->setParentItem(this);
+    textItem->setPen(QPen(Qt::white));
+    QRectF textRect = textItem->boundingRect();
+    textItem->setPos(-textRect.width() / 2, -textRect.height() / 2);
+}
+
+void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
+    QGraphicsEllipseItem::mouseDoubleClickEvent(event);
+    auto *menu = new QMenu;
+    QAction *action1 = menu->addAction("Move Left");
+    QAction *action2 = menu->addAction("Move Right");
+    menu->exec(QCursor::pos());
+}
+
+void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    QGraphicsEllipseItem::mouseMoveEvent(event);
+    updateEdge();
 }
 
 QString Node::toString() const {
-    if (m_key == 0) {
+    if (_key == 0) {
         return "";
     }
-    return QString::number(m_key);
+    return QString::number(_key);
 }
 
-void Node::setItem(NodeGraphicsItem *nodeItem) {
-    m_item = nodeItem;
-}
-
-NodeGraphicsItem *Node::getItem() const {
-    return m_item;
-}
-
-void Node::setParent(Node *node) {
-    m_parent = node;
-}
-
-Node *Node::getParent() const {
-    return m_parent;
+void Node::setParent(Node *node, QGraphicsLineItem *edge) {
+    _parent = node;
+    parentEdge = edge;
+    updateEdge();
 }
 
 QVector<Node *> Node::getChildren() const {
-    return m_children;
+    return _children;
 }
+
+int Node::getDepth() const {
+    return _depth;
+}
+
+void Node::changePos(qreal ax, qreal ay) {
+    QGraphicsItem::setPos(ax, ay);
+    updateEdge();
+}
+
+void Node::updateEdge() {
+    if (_parent) {
+        QPointF pos = scenePos() - _parent->pos();
+        parentEdge->setLine(QLineF{{0, 0}, pos});
+    }
+    for (auto &child: _children) {
+        QPointF pos = child->pos() - scenePos();
+        auto *edge = child->getParentEdge();
+        if (edge) {
+            edge->setLine(QLineF{{0, 0}, pos});
+        }
+    }
+}
+
+void Node::scalePos(qreal ax, qreal ay) {
+    QPointF pos = scenePos();
+    changePos(pos.x() * ax, pos.y() * ay);
+    for (auto &child: _children) {
+        child->scalePos(ax, ay);
+    }
+}
+
+QGraphicsLineItem *Node::getParentEdge() {
+    return parentEdge;
+}
+
+

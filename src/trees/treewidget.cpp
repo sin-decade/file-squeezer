@@ -19,27 +19,10 @@
 */
 
 // own
-#include "nodegraphicsitem.hpp"
-#include "treewidget.hpp"
 #include "node.hpp"
+#include "treewidget.hpp"
 
-
-int find_depth(const Node *root) {
-    const auto &children = root->getChildren();
-
-    if (children.empty()) {
-        return 1; // if the root has no children, return 1
-    }
-
-    int max_child_depth = 0;
-    for (const auto *child: children) {
-        max_child_depth = std::max(max_child_depth, find_depth(child));
-    }
-
-    return 1 + (max_child_depth ? max_child_depth : 0);
-}
-
-Node *generateTree(int depth) {
+Node *TreeWidget::generateTree(int depth) {
     if (depth == 0) {
         return new Node(1 + rand() % 100);
     }
@@ -51,47 +34,52 @@ Node *generateTree(int depth) {
     return children.isEmpty() ? new Node(rand() % 100) : new Node(children);
 }
 
-void TreeWidget::drawTree(QVector<Node *> parents, int y) {
+void TreeWidget::setTree(QVector<Node *> parents, int yOffset) {
+    if (parents.isEmpty()) {
+        return;
+    }
     int x = width() / (parents.size() + 1);
     QVector<Node *> children;
     for (int offset = x, i = 0; i < parents.size(); i++, offset += x) {
-        auto *nodeItem = new NodeGraphicsItem(parents[i]);
-        nodeItem->setRect(-radius_, -radius_, 2 * radius_, 2 * radius_);
-        nodeItem->setPos(offset, y);
-        scene->addItem(nodeItem);
+        parents[i]->changePos(offset, yOffset);
         children.append(parents[i]->getChildren());
     }
-    if (!children.isEmpty()) {
-        drawTree(children, y + levelStep);
-    }
+    setTree(children, yOffset + level_step);
 }
 
-void TreeWidget::drawTree() {
-    int depth = find_depth(root_);
-    if (depth == 1) {
-        levelStep = height();
-    } else {
-        levelStep = (height() - 3 * radius_) / (depth - 1);
-    }
-    drawTree({root_}, radius_);
-    root_->getItem()->updateEdges();
+void TreeWidget::setTree() {
+    int depth = _root->getDepth();
+    level_step = (height() - 30) / qMax(1, depth - 1);
+    setTree({_root}, 0);
 }
+
 
 TreeWidget::TreeWidget(Node *root, QWidget *parent)
-        : QGraphicsView(parent), root_(root) {
-    if (!root_) {
-        root_ = generateTree(rand() % 7);
+        : QGraphicsView(parent), _root(root) {
+    if (!_root) {
+        _root = generateTree(rand() % 7);
     }
-    scene = new QGraphicsScene(this);
-    setScene(scene);
+    _scene = new QGraphicsScene(this);
+    setScene(_scene);
     setAlignment(Qt::AlignLeft | Qt::AlignTop);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    drawTree();
+    drawTree(_root);
+    setTree();
+    _size = rect().size();
 }
 
 void TreeWidget::resizeEvent(QResizeEvent *event) {
     QGraphicsView::resizeEvent(event);
-    scene->clear();
-    drawTree();
+//    fitInView(_scene->sceneRect(), Qt::IgnoreAspectRatio);
+    _root->scalePos(rect().width() / _size.width(), rect().height() / _size.height());
+    _size = rect().size();
+}
+
+void TreeWidget::drawTree(Node *root) {
+    _scene->addItem(root);
+    auto children = root->getChildren();
+    for (auto &i: children) {
+        drawTree(i);
+    }
 }

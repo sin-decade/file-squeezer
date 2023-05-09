@@ -18,7 +18,6 @@
  *
 */
 
-
 #ifndef FILE_SQUEEZER_TREEWIDGET_HPP
 #define FILE_SQUEEZER_TREEWIDGET_HPP
 
@@ -28,41 +27,65 @@
 class Node;
 
 /**
- * @brief The TreeWidget class is responsible for creating and updating the visualization of the tree.
+ * The TreeWidget class represents a widget that displays a tree structure.
+ * It inherits QGraphicsView and manages a QGraphicsScene, where each node in the tree is represented
+ * by a QGraphicsEllipseItem object.
  */
 class TreeWidget : public QGraphicsView {
 public:
+
     /**
-     * @brief Constructs a TreeWidget object with a root node and a parent widget.
-     * @param root The root node of the tree.
-     * @param parent The parent widget of the TreeWidget.
+     * Constructs a new TreeWidget with the given root node and parent widget.
+     *
+     * @param root The root node of the tree. If null, a random tree will be generated.
+     * @param parent The parent widget of this TreeWidget.
      */
     explicit TreeWidget(Node *root = nullptr, QWidget *parent = nullptr);
 
-protected:
     /**
-     * @brief Overrides the resize event of QGraphicsView to update the scene.
-     * @param event A pointer to the resize event.
+     * Generates a random tree with the given _depth.
+     *
+     * @param depth The _depth of the tree to generate.
+     * @return The root node of the generated tree.
+     */
+    static Node *generateTree(int depth);
+
+protected:
+
+    /**
+     * This function is called when the widget is resized.
+     * It resizes the nodes in the tree to fit the new _size of the widget.
+     *
+     * @param event The resize event.
      */
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    /**
-     * @brief Recursively draws the tree starting from the given parents at the specified y-coordinate.
-     * @param parents The parent nodes of the current level.
-     * @param y The y-coordinate of the current level.
-     */
-    void drawTree(QVector<Node *> parents, int y);
 
     /**
-     * @brief Draws the entire tree by calling drawTree with the root node.
+     * This function sets the positions of the nodes in the tree.
+     *
+     * @param parents The nodes to set the positions of.
+     * @param yOffset The y coordinate offset.
      */
-    void drawTree();
+    void setTree(QVector<Node *> parents, int yOffset);
 
-    Node *root_; /**< The root node of the tree. */
-    int radius_ = 10; /**< The radius of each node. */
-    int levelStep{}; /**< The vertical spacing between each level. */
-    QGraphicsScene *scene; /**< The scene containing the tree visualization. */
+    /**
+     * This function recursively draws the tree starting from the given root node.
+     *
+     * @param root The root node of the tree to draw.
+     */
+    void drawTree(Node *root);
+
+    /**
+     * This function sets the positions of the nodes in the tree.
+     */
+    void setTree();
+
+    QGraphicsScene *_scene; /**< The QGraphicsScene where the nodes in the tree are displayed. */
+    Node *_root; /**< The root node of the tree. */
+    QSizeF _size; /**< The _size of the widget. */
+    int level_step{}; /**< The vertical distance between levels in the tree. */
 };
 
 #endif //FILE_SQUEEZER_TREEWIDGET_HPP

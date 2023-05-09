@@ -11,7 +11,7 @@
 **File-Squeezer** is a unique file archiver designed for research and
 experimentation with different compression algorithms. Unlike other archiving
 tools, File-Squeezer provides users with the ability to manually adjust
-parameters such as sliding window size and character length to see how they
+parameters such as sliding window _size and character length to see how they
 impact compression quality. Additionally, the tool offers a real-time
 visualization of compression operations, providing users with a better
 understanding of how different algorithms work. While file compression is a
