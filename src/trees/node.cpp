@@ -66,22 +66,20 @@ void Node::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsEllipseItem::mousePressEvent(event);
     clearFocus();
     if (event->button() == Qt::RightButton) {
-        if (_parent) {
+        if (_parent && _parent->getChildrenCount() > 1) {
             auto children = _parent->getChildren();
-            if (children.size() > 1) {
-                int idx = children.indexOf(this);
-                auto *menu = new QMenu;
-                if (idx > 0) {
-                    menu->addAction("Move Left", [=]() {
-                        swapPos(children[idx - 1], this);
-                    });
-                }
-                if (idx < children.size() - 1)
-                    menu->addAction("Move Right", [=]() {
-                        swapPos(this, children[idx + 1]);
-                    });
-                menu->exec(QCursor::pos());
+            int idx = children.indexOf(this);
+            auto *menu = new QMenu;
+            if (idx > 0) {
+                menu->addAction("Move Left", [=]() {
+                    swapPos(children[idx - 1], this);
+                });
             }
+            if (idx < children.size() - 1)
+                menu->addAction("Move Right", [=]() {
+                    swapPos(this, children[idx + 1]);
+                });
+            menu->exec(QCursor::pos());
         }
     }
 }
@@ -149,27 +147,44 @@ QGraphicsLineItem *Node::getParentEdge() {
     return parentEdge;
 }
 
-void Node::swapPos(Node *right, Node *left) {
+void Node::swapPos(Node *left, Node *right) {
+    if (left->pos().x() > right->pos().x()) {
+        swapPos(right, left);
+        return;
+    }
     auto tmpPos = left->scenePos();
     left->changePos(right->scenePos());
     right->changePos(tmpPos);
-    auto leftChildren = left->getChildren();
-    auto rightChildren = right->getChildren();
-    if (!leftChildren.isEmpty() && !rightChildren.isEmpty()) {
-        int leftSize = leftChildren.size();
-        int rightSize = rightChildren.size();
-        for (int i = 0; i < leftSize / 2; i++) {
-            swapPos(leftChildren[i], leftChildren[leftSize - i - 1]);
-        }
-        for (int i = 0; i < rightSize / 2; i++) {
-            swapPos(rightChildren[i], rightChildren[rightSize - i - 1]);
-        }
-        for (int i = 0, j = rightSize + leftSize - 1; i < j; i++, j--) {
-            auto *leftNode = i < leftSize ? leftChildren[i] : rightChildren[i - leftSize];
-            auto *rightNode = j < leftSize ? leftChildren[j] : rightChildren[j - leftSize];
-            swapPos(leftNode, rightNode);
+    this->relocateChildren({right, left});
+}
+
+void Node::relocateChildren(const QVector<Node *>& nodes) {
+    if (nodes.size() < 2) {
+        return;
+    }
+    QVector<Node *> children;
+    QVector<QPointF> positions;
+    for (auto &node: nodes) {
+        auto nodeChildren = node->getChildren();
+        for (auto &child: nodeChildren) {
+            children.push_back(child);
+            positions.push_back(child->pos());
         }
     }
+    std::sort(positions.begin(), positions.end(), [](QPointF a, QPointF b) {
+        return a.x() < b.x();
+    });
+    int n = positions.size();
+    for (int i = 0; i < n; i++) {
+        if (children[i]->pos() != positions[i]) {
+            children[i]->changePos(positions[i]);
+        }
+    }
+    relocateChildren(children);
+}
+
+int Node::getChildrenCount() const {
+    return _children.size();
 }
 
 

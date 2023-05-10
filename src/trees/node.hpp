@@ -54,6 +54,8 @@ public:
      */
     QVector<Node *> getChildren() const;
 
+    int getChildrenCount() const;
+
     /**
      * @brief Returns the depth of the node in the tree.
      * @return The depth of the node in the tree.
@@ -90,6 +92,8 @@ public:
      * @brief Changes the order of the two vertices relative to the parent.
      */
     void swapPos(Node *right, Node *left);
+
+    void relocateChildren(const QVector<Node *>& nodes);
 
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
