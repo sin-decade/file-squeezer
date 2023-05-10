@@ -33,7 +33,7 @@ TabSplitter::TabSplitter(Qt::Orientation orientation, QWidget *parent) : QSplitt
 void TabSplitter::addTabWidget(bool back) {
     auto newTabWidget = new QTabWidget;
 
-    connect(newTabWidget->tabBar(), &QTabBar::tabBarClicked,
+    connect(newTabWidget->tabBar(), &QTabBar::tabBarDoubleClicked,
             this, [=](int index) { showMenu(newTabWidget, index); });
 
     if (back) {
