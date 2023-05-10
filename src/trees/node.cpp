@@ -39,11 +39,11 @@ Node::Node(QVector<Node *> children, QGraphicsItem *parent)
 }
 
 void Node::addLinks() {
-    for (auto &child: _children) {
-        _depth = qMax(_depth, child->getDepth() + 1);
+    for (int i = 0; i < _children.size(); i++) {
+        _depth = qMax(_depth, _children[i]->getDepth() + 1);
         auto *edge = new QGraphicsLineItem(this);
         edge->setPen(QPen(Qt::white));
-        child->setParent(this, edge);
+        _children[i]->setParent(this, edge, i);
     }
 }
 
@@ -55,8 +55,7 @@ void Node::setGraphic() {
 }
 
 void Node::addTextItem() {
-    textItem = new QGraphicsSimpleTextItem(toString());
-    textItem->setParentItem(this);
+    auto *textItem = new QGraphicsSimpleTextItem(toString(), this);
     textItem->setPen(QPen(Qt::white));
     QRectF textRect = textItem->boundingRect();
     textItem->setPos(-textRect.width() / 2, -textRect.height() / 2);
@@ -64,20 +63,27 @@ void Node::addTextItem() {
 
 void Node::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsEllipseItem::mousePressEvent(event);
-    clearFocus();
     if (event->button() == Qt::RightButton) {
         if (_parent && _parent->getChildrenCount() > 1) {
             auto children = _parent->getChildren();
-            int idx = children.indexOf(this);
+            Node *left = nullptr;
+            Node *right = nullptr;
+            for (auto &node: children) {
+                if (node->getIndex() + 1 == _index) {
+                    left = node;
+                } else if (node->getIndex() == _index + 1) {
+                    right = node;
+                }
+            }
             auto *menu = new QMenu;
-            if (idx > 0) {
+            if (left) {
                 menu->addAction("Move Left", [=]() {
-                    swapPos(children[idx - 1], this);
+                    swapPos(left, this);
                 });
             }
-            if (idx < children.size() - 1)
+            if (right)
                 menu->addAction("Move Right", [=]() {
-                    swapPos(this, children[idx + 1]);
+                    swapPos(this, right);
                 });
             menu->exec(QCursor::pos());
         }
@@ -85,9 +91,10 @@ void Node::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    QGraphicsEllipseItem::mouseMoveEvent(event);
-    clearFocus();
-    updateEdge();
+    if (abs(event->lastPos().x()) < _radius && abs(event->lastPos().y()) < _radius) {
+        QGraphicsEllipseItem::mouseMoveEvent(event);
+        updateEdge();
+    }
 }
 
 QString Node::toString() const {
@@ -97,9 +104,10 @@ QString Node::toString() const {
     return QString::number(_key);
 }
 
-void Node::setParent(Node *node, QGraphicsLineItem *edge) {
+void Node::setParent(Node *node, QGraphicsLineItem *edge, int idx) {
     _parent = node;
     parentEdge = edge;
+    setIndex(idx);
     updateEdge();
 }
 
@@ -155,10 +163,14 @@ void Node::swapPos(Node *left, Node *right) {
     auto tmpPos = left->scenePos();
     left->changePos(right->scenePos());
     right->changePos(tmpPos);
+    int tmpIdx = left->getIndex();
+    left->setIndex(right->getIndex());
+    right->setIndex(tmpIdx);
     this->relocateChildren({right, left});
+    std::swap(left, right);
 }
 
-void Node::relocateChildren(const QVector<Node *>& nodes) {
+void Node::relocateChildren(const QVector<Node *> &nodes) {
     if (nodes.size() < 2) {
         return;
     }
@@ -185,6 +197,23 @@ void Node::relocateChildren(const QVector<Node *>& nodes) {
 
 int Node::getChildrenCount() const {
     return _children.size();
+}
+
+int Node::getIndex() const {
+    return _index;
+}
+
+void Node::setIndex(int idx) {
+    _index = idx;
+    setToolTip(getCode());
+}
+
+QString Node::getCode() {
+    if (_parent == nullptr) {
+        return "";
+    }
+    // todo
+    return _parent->getCode() + QString::number(_index);
 }
 
 

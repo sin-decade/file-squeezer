@@ -21,6 +21,7 @@
 #define FILE_SQUEEZER_NODE_HPP
 
 #include <QGraphicsEllipseItem>
+#include <QTabWidget>
 
 /**
  * @brief The Node class represents a node in a tree.
@@ -45,8 +46,9 @@ public:
      * @brief Sets the parent node and the edge that connects the parent and this node.
      * @param node The parent node.
      * @param edge The edge that connects the parent and this node.
+     * @param idx The index under which this child is held by the parent.
      */
-    void setParent(Node *node, QGraphicsLineItem *edge);
+    void setParent(Node *node, QGraphicsLineItem *edge, int idx);
 
     /**
      * @brief Returns the vector of children of the node.
@@ -61,6 +63,12 @@ public:
      * @return The depth of the node in the tree.
      */
     int getDepth() const;
+
+    int getIndex() const;
+
+    void setIndex(int idx);
+
+    QString getCode();
 
     /**
      * @brief Changes the position of the node.
@@ -93,12 +101,13 @@ public:
      */
     void swapPos(Node *right, Node *left);
 
-    void relocateChildren(const QVector<Node *>& nodes);
+    void relocateChildren(const QVector<Node *> &nodes);
 
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
 
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+
 
 private:
     /**
@@ -127,14 +136,15 @@ private:
      */
     void updateEdge();
 
-    QGraphicsSimpleTextItem *textItem{}; /**< The text item of the node. */
     QGraphicsLineItem *parentEdge = nullptr; /**< The edge that connects the parent and this node. */
 
     Node *_parent = nullptr; /**< The parent node of the node. */
     QVector<Node *> _children; /**< The vector of children of the node. */
     int _key = 0; /**< The key value of the node. */
+    int _index = 0;
     int _depth = 0; /**< The _depth of the node in the tree. */
     qreal _radius = 10; /**< The _radius of the node. */
+    bool m_menuDisplayed = false;
 };
 
 #endif //FILE_SQUEEZER_NODE_HPP
